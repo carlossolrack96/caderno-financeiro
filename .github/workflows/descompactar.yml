@@ -1,0 +1,31 @@
+name: Preparar projeto
+
+on:
+  push:
+    paths:
+      - "caderno-financeiro.zip"
+
+permissions:
+  contents: write
+
+jobs:
+  unpack:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Baixar projeto
+        uses: actions/checkout@v4
+
+      - name: Descompactar
+        run: |
+          unzip -o caderno-financeiro.zip -d temp
+          cp -R temp/* .
+          rm -rf temp caderno-financeiro.zip
+
+      - name: Salvar arquivos
+        run: |
+          git config user.name "GitHub Actions"
+          git config user.email "actions@github.com"
+          git add .
+          git commit -m "Adicionar projeto Caderno financeiro" || exit 0
+          git push
