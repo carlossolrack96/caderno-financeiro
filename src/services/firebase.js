@@ -3,15 +3,16 @@ import { getAuth } from "firebase/auth";
 import { getFirestore, enableIndexedDbPersistence } from "firebase/firestore";
 
 const firebaseConfig = {
-  apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
-  authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN,
-  projectId: import.meta.env.VITE_FIREBASE_PROJECT_ID,
-  storageBucket: import.meta.env.VITE_FIREBASE_STORAGE_BUCKET,
-  messagingSenderId: import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID,
-  appId: import.meta.env.VITE_FIREBASE_APP_ID
+  apiKey: "AIzaSyAjBDJ0YC9bdrUDKq3TawF3ZGhoFq4Y9zc",
+  authDomain: "caderno-financeiro-a62c0.firebaseapp.com",
+  projectId: "caderno-financeiro-a62c0",
+  storageBucket: "caderno-financeiro-a62c0.firebasestorage.app",
+  messagingSenderId: "51209468744",
+  appId: "1:51209468744:web:87e06710dc9cd32aa2517d"
 };
 
 const app = initializeApp(firebaseConfig);
+
 export const auth = getAuth(app);
 export const db = getFirestore(app);
 
