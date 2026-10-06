@@ -61,7 +61,7 @@ function CalendarPage({user,items,cats,notes}){
  </section>
 }
 
-function DayModal({user,date,items,cats,note,close}){
+function DayModal({user,companyId,date,items,cats,note,close}){
  const [form,setForm]=useState(null),[text,setText]=useState(note?.text||"");
  async function saveNote(){await saveDoc(user.uid,"notes",note?.id||iso(date),{date:iso(date),text});close()}
  return <div className="overlay"><div className="modal"><div className="modal-head"><h3>{date.toLocaleDateString("pt-BR",{weekday:"long",day:"2-digit",month:"long"})}</h3><button onClick={close}>×</button></div><div className="day-balance">{money(summarize(items).balance)}</div>{items.map(x=><div className="item" key={x.id}><div><b className={x.type==="income"?"positive":"negative"}>{x.type==="income"?"+":"-"} {money(x.amount)}</b><small>{(cats.find(c=>c.id===x.categoryId)?.name)||x.category} • {x.description}</small></div><div><button onClick={()=>setForm(x)}><Edit3 size={17}/></button><button onClick={()=>removeItem(user.uid,"transactions",x.id)}><Trash2 size={17}/></button></div></div>)}<button className="primary" onClick={()=>setForm({type:"expense",amount:"",category:cats.find(c=>c.type==="expense")?.name||"",description:""})}><Plus/> Lançamento</button><label>Anotação do dia<textarea value={text} onChange={e=>setText(e.target.value)} placeholder="Escreva uma anotação..."/></label><button onClick={saveNote}>Salvar anotação</button>{form&&<TransactionForm user={user} date={date} cats={cats} data={form} close={()=>setForm(null)}/>}</div></div>
