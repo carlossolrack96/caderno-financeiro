@@ -10,6 +10,7 @@ import {
   orderBy,
   serverTimestamp,
   getDocs,
+  getDoc,
   where,
   writeBatch,
   runTransaction
@@ -157,6 +158,19 @@ const companyOne = (
 ========================================================= */
 
 export const getUserProfile = async (uid) => {
+  const ref = doc(db, "users", uid);
+
+  const snap = await getDoc(ref);
+
+  if (!snap.exists()) {
+    return null;
+  }
+
+  return {
+    id: snap.id,
+    ...snap.data()
+  };
+};
 
   const ref =
     doc(db, "users", uid);
