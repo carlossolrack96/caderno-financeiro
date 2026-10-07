@@ -1,7 +1,7 @@
 import React,{useEffect,useMemo,useState} from "react";
 import {onAuthStateChanged, signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut} from "firebase/auth";
 import {auth} from "./services/firebase";
-import {subscribeCollection,addItem,updateItem,removeItem,saveDoc,listenDoc,renameCategoryAndLaunches,nextReceiptNumber} from "./services/database";
+import import {subscribeCollection,addItem,updateItem,removeItem,saveDoc,listenDoc,renameCategoryAndLaunches,nextReceiptNumber,addCompanyItem,updateCompanyItem} from "./services/database";;
 import {money} from "./utils/currency";
 import {iso,brDate,monthDays} from "./utils/dates";
 import {summarize,categoriesSummary} from "./utils/calculations";
@@ -69,7 +69,8 @@ function DayModal({user,companyId,date,items,cats,note,close}){
 function TransactionForm({user,companyId,date,cats,data,close}){
  const [f,setF]=useState({...data});
  async function save(e){e.preventDefault();const selectedCat=cats.find(c=>c.name===f.category && c.type===f.type);
-const payload={type:f.type,amount:Number(f.amount),category:f.category,categoryId:selectedCat?.id||f.categoryId||"",description:f.description,date:iso(date)};if(f.id)await updateItem(user.uid,"transactions",f.id,payload);else await addItem(user.uid,"transactions",payload);close()}
+const payload={type:f.type,amount:Number(f.amount),category:f.category,categoryId:selectedCat?.id||f.categoryId||"",description:f.description,date:iso(date)};if(f.id)await updateCompanyItem(companyId,"transactions",f.id,payload);
+else await addCompanyItem(companyId,"transactions",payload);close()}
  const filtered=cats.filter(c=>c.type===f.type);
  return <div className="overlay nested"><form className="modal small" onSubmit={save}><div className="modal-head"><h3>{f.id?"Editar":"Novo"} lançamento</h3><button type="button" onClick={close}>×</button></div><select value={f.type} onChange={e=>setF({...f,type:e.target.value,category:""})}><option value="expense">Despesa</option><option value="income">Receita</option></select><input required type="number" step="0.01" placeholder="Valor" value={f.amount} onChange={e=>setF({...f,amount:e.target.value})}/><select required value={f.category} onChange={e=>setF({...f,category:e.target.value})}><option value="">Categoria</option>{filtered.map(c=><option key={c.id}>{c.name}</option>)}</select><input placeholder="Descrição" value={f.description||""} onChange={e=>setF({...f,description:e.target.value})}/><button className="primary">Salvar</button></form></div>
 }
